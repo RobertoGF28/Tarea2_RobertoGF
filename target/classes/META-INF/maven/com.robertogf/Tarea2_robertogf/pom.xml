@@ -4,4 +4,13 @@
   <artifactId>Tarea2_robertogf</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Tarea2_robertogf</name>
+  
+<!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+<dependencies>
+	<dependency>
+	    <groupId>com.mysql</groupId>
+	    <artifactId>mysql-connector-j</artifactId>
+	    <version>9.4.0</version>
+	</dependency>
+</dependencies>
 </project>
