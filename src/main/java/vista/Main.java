@@ -2,20 +2,26 @@ package vista;
 
 import java.util.Scanner;
 
+import com.mysql.cj.xdevapi.DbDoc;
+
+import util.ConexDB;
+
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
+		ConexDB conexBD= new ConexDB();
 		
+		conexBD.getConnection();
 		
 		try {
 			
 			int opcion;
 			
 			System.out.println("===================CIRCO===================");
-			System.out.println("1. Ver Espectáculos");
-			System.out.println("2. Iniciar Sesión");
+			System.out.println("1. Ver Espectï¿½culos");
+			System.out.println("2. Iniciar Sesiï¿½n");
 			System.out.println("0. Salir");
 			System.out.println("===========================================");
 			opcion=sc.nextInt();
@@ -26,6 +32,8 @@ public class Main {
 				case 1:
 					
 					break;
+					
+					
 
 				default:
 					break;
