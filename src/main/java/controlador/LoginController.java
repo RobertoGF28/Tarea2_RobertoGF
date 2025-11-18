@@ -14,6 +14,9 @@ public class LoginController {
 				sc.nextLine();
 				System.out.println("Introduce el nombre de usuario: ");
 				nombreUsu=sc.nextLine();
+				System.out.println("Introduce la contraseña: ");
+				password=sc.nextLine();
+				
 				
 				
 				
