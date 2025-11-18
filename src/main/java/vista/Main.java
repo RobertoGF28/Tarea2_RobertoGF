@@ -1,9 +1,11 @@
 package vista;
 
+import java.sql.PseudoColumnUsage;
 import java.util.Scanner;
 
 import com.mysql.cj.xdevapi.DbDoc;
 
+import dao.PersonaDAO;
 import util.ConexDB;
 
 public class Main {
@@ -13,39 +15,14 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		ConexDB conexBD= new ConexDB();
 		
-		conexBD.getConnection();
+		PersonaDAO pd=new PersonaDAO();
 		
-		try {
-			
-			int opcion;
-			
-			System.out.println("===================CIRCO===================");
-			System.out.println("1. Ver Espect�culos");
-			System.out.println("2. Iniciar Sesi�n");
-			System.out.println("0. Salir");
-			System.out.println("===========================================");
-			opcion=sc.nextInt();
-			
-			do {
-				
-				switch (opcion) {
-				case 1:
-					
-					break;
-					
-					
-
-				default:
-					break;
-				}
-				
-				
-			} while (opcion!=0);
-			
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		pd.getPersonas();
+		
+		
+		
+		
+		
 
 	}
 

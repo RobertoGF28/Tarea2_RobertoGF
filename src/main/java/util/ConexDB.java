@@ -1,19 +1,18 @@
 package util;
 
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.sql.*;
 import java.util.Properties;
 
-import com.mysql.cj.xdevapi.DbDoc;
+
 
 public class ConexDB {
-	 // --- CONFIGURACIÓN DE LA BASE DE DATOS ---
+
 	static Properties p= new Properties();
 	
 	
 	
-    private static final String URL = "jdbc:mysql://localhost:3306/circo_robertogf"; 
+    private static final String URL = "jdbc:mysql://localhost:3306/circo_robertogarcia"; 
     private static final String USER = "root";
     private static final String PASSWORD = "";
     
@@ -34,14 +33,14 @@ public class ConexDB {
 
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             
-            System.out.println("Conexión exitosa a la base de datos.");
+            System.out.println("Conexion exitosa a la base de datos.");
             
         } catch (ClassNotFoundException e) {
-            System.err.println("Error: No se encontró el driver JDBC de MySQL.");
+            System.err.println("Error: No se encontro el driver JDBC de MySQL.");
             e.printStackTrace();
         } catch (SQLException e) {
             System.err.println("Error: Fallo al conectar con la base de datos.");
-            System.err.println("Código de error SQL: " + e.getSQLState());
+            System.err.println("Codigo de error SQL: " + e.getSQLState());
             e.printStackTrace();
         }
         return connection;
@@ -52,10 +51,10 @@ public class ConexDB {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                System.out.println("Conexión cerrada.");
+                System.out.println("Conexion cerrada.");
             }
         } catch (SQLException e) {
-            System.err.println("Error al intentar cerrar la conexión.");
+            System.err.println("Error al intentar cerrar la conexion.");
             e.printStackTrace();
         }
     }
