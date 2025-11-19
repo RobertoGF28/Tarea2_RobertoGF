@@ -1,6 +1,8 @@
 package util;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
@@ -8,54 +10,36 @@ import java.util.Properties;
 
 public class ConexDB {
 
-	static Properties p= new Properties();
-	
-	
-	
-    private static final String URL = "jdbc:mysql://localhost:3306/circo_robertogarcia"; 
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-    
+	   private static String url;
+	    private static String user;
+	    private static String password;
 
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+	   
 
+	    private static void loadProperties() {
+	        try (InputStream input = ConexDB.class.getClassLoader()
+	                .getResourceAsStream("application.properties")) {
 
-    public static Connection getConnection() {
-        Connection connection = null;
-        try {
-        	
-        
+	            if (input == null) {
+	                System.out.println("No se encontro application.properties");
+	            }
 
-            Class.forName(DRIVER);
-            
-            System.out.println("Intentando conectar a la base de datos...");
-            
+	            Properties p = new Properties();
+	            p.load(input);
 
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            
-            System.out.println("Conexion exitosa a la base de datos.");
-            
-        } catch (ClassNotFoundException e) {
-            System.err.println("Error: No se encontro el driver JDBC de MySQL.");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.err.println("Error: Fallo al conectar con la base de datos.");
-            System.err.println("Codigo de error SQL: " + e.getSQLState());
-            e.printStackTrace();
-        }
-        return connection;
+	            url = p.getProperty("db.url");
+	            user = p.getProperty("db.user");
+	            password = p.getProperty("db.password");
+
+	        } catch (IOException e) {
+	            System.out.println("Error al cargar application.properties: " + e.getLocalizedMessage());
+	        }
+	    }
+
+	    public static Connection getConnection() throws SQLException {
+	    	loadProperties();
+	    	
+	        return DriverManager.getConnection(url, user, password);
+	    }  
     }
 
-
-    public static void closeConnection(Connection connection) {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Conexion cerrada.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al intentar cerrar la conexion.");
-            e.printStackTrace();
-        }
-    }
-}

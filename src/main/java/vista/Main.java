@@ -17,8 +17,6 @@ public class Main {
 		
 		PersonaDAO pd=new PersonaDAO();
 		
-		pd.getPersonas();
-		
 		
 		
 		

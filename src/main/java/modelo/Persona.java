@@ -7,14 +7,16 @@ public class Persona {
 	protected String email;
 	protected String nombre;
 	protected String nacionalidad;
+	protected Long id_credenciales;
 	
 	
-	public Persona(long id, String email, String nombre, String nacionalidad) {
+	public Persona(long id, String email, String nombre, String nacionalidad, long id_credenciales) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.nombre = nombre;
 		this.nacionalidad = nacionalidad;
+		this.id_credenciales = id_credenciales;
 	}
 
 
@@ -55,6 +57,19 @@ public class Persona {
 
 	public void setNacionalidad(String nacionalidad) {
 		this.nacionalidad = nacionalidad;
+	}
+	
+	
+	
+
+
+	public Long getId_credenciales() {
+		return id_credenciales;
+	}
+
+
+	public void setId_credenciales(Long id_credenciales) {
+		this.id_credenciales = id_credenciales;
 	}
 
 

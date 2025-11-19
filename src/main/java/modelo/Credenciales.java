@@ -9,6 +9,9 @@ public class Credenciales {
 	private Perfiles perfil;
 	
 	
+	
+
+
 	public Credenciales(Long id, String nombre, String password, Perfiles perfil) {
 		super();
 		this.id = id;
