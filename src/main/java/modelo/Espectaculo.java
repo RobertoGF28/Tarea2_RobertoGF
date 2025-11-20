@@ -7,19 +7,20 @@ public class Espectaculo {
 	private String nombre;
 	private LocalDate fechaini;
 	private LocalDate fechafin;
+	private Long id_Coord;
 	private Coordinacion coordinador;
 	
 	
 	
 
 
-	public Espectaculo(Long idEsp, String nombre, LocalDate fechaini, LocalDate fechafin, Coordinacion coordinador) {
+	public Espectaculo(Long idEsp, String nombre, LocalDate fechaini, LocalDate fechafin, Long id_Coord) {
 		super();
 		this.idEsp = idEsp;
 		this.nombre = nombre;
 		this.fechaini = fechaini;
 		this.fechafin = fechafin;
-		this.coordinador = coordinador;
+		this.id_Coord = id_Coord;
 	}
 
 
@@ -70,6 +71,18 @@ public class Espectaculo {
 
 	public void setCoordinador(Coordinacion coordinador) {
 		this.coordinador = coordinador;
+	}
+	
+	
+
+
+	public Long getId_Cooord() {
+		return id_Coord;
+	}
+
+
+	public void setId_Cooord(Long id_Cooord) {
+		this.id_Coord = coordinador.getIdCoord();
 	}
 
 

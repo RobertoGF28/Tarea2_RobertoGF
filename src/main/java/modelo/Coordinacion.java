@@ -7,13 +7,13 @@ public class Coordinacion extends Persona{
 	private boolean senior=false;
 	private LocalDate fechasenior=null;
 	
-	
-	
 
-
-	public Coordinacion(long id, String email, String nombre, String nacionalidad) {
-		super(id, email, nombre, nacionalidad);
-		// TODO Auto-generated constructor stub
+	public Coordinacion(long id, String email, String nombre, String nacionalidad, long id_credenciales, Long idCoord,
+			boolean senior, LocalDate fechasenior) {
+		super(id, email, nombre, nacionalidad, id_credenciales);
+		this.idCoord = idCoord;
+		this.senior = senior;
+		this.fechasenior = fechasenior;
 	}
 
 

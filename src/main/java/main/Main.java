@@ -1,4 +1,4 @@
-package vista;
+package main;
 
 import java.sql.PseudoColumnUsage;
 import java.util.Scanner;

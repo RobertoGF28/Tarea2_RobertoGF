@@ -12,25 +12,26 @@ import util.ConexDB;
 
 public class CredencialesDAO {
 
-	 public boolean agregar(Credenciales cred) {
+	 public boolean agregar(Credenciales c) {
 	        String sql = "INSERT INTO credenciales (nombre, password, perfil) VALUES (?, ?, ?)";
 	        try (Connection conn = ConexDB.getConnection();
 	             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-	            ps.setString(1, cred.getNombre());
-	            ps.setString(2, cred.getPassword());
-	            ps.setString(3, cred.getPerfil().name());
+	            ps.setString(1, c.getNombre());
+	            ps.setString(2, c.getPassword());
+	            ps.setString(3, c.getPerfil().name());
 
 	            int rows = ps.executeUpdate();
 	            if (rows == 0) return false;
+	            
 	            try (ResultSet keys = ps.getGeneratedKeys()) {
 	                if (keys.next()) {
-	                    cred.setId(keys.getLong(1));
+	                    c.setId(keys.getLong(1));
 	                }
 	            }
 	            return true;
 	        } catch (SQLException e) {
-	            System.err.println("Error en CredencialesDAO.agregar: " + e.getMessage());
+	            System.err.println("Error al acceder al sql: " + e.getMessage());
 	            return false;
 	        }
 	    }
@@ -38,8 +39,8 @@ public class CredencialesDAO {
 	 
 	    public Credenciales obtenerPorNombre(String nombre) {
 	        String sql = "SELECT ID, nombre, password, perfil FROM credenciales WHERE nombre = ?";
-	        try (Connection conn = ConexDB.getConnection();
-	             PreparedStatement ps = conn.prepareStatement(sql)) {
+	        try (Connection con = ConexDB.getConnection();
+	             PreparedStatement ps = con.prepareStatement(sql)) {
 
 	            ps.setString(1, nombre);
 	            try (ResultSet rs = ps.executeQuery()) {
@@ -53,7 +54,7 @@ public class CredencialesDAO {
 	                }
 	            }
 	        } catch (SQLException e) {
-	            System.err.println("Error en CredencialesDAO.obtenerPorNombre: " + e.getMessage());
+	            System.out.println("Error al acceder al sql: " + e.getMessage());
 	        }
 	        return null;
 	    }

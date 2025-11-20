@@ -10,7 +10,7 @@ public class Artista extends Persona{
 
 	public Artista(long id, String email, String nombre, String nacionalidad, Long idArt, String apodoString,
 			Especialidades[] especialidad) {
-		super(id, email, nombre, nacionalidad);
+		super(id, email, nombre, nacionalidad, idArt);
 		this.idArt = idArt;
 		this.apodoString = apodoString;
 		Especialidad = especialidad;

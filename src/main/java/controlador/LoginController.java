@@ -1,5 +1,8 @@
 package controlador;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.Scanner;
 
 import dao.CredencialesDAO;
@@ -8,76 +11,47 @@ import modelo.Perfiles;
 
 public class LoginController {
 
-	
+    private final CredencialesDAO cDAO = new CredencialesDAO();
 
-    private final Scanner sc = new Scanner(System.in);
-    private final CredencialesDAO credDAO = new CredencialesDAO();
+    private String adminUser;
+    private String adminPass;
+    
+    public LoginController() {
+        cargarAdmin();
+    }
 
-    public void lanzar() {
-        boolean corriendo = true;
-        while (corriendo) {
-            showMenu();
-            String opt = sc.nextLine().trim();
-            switch (opt) {
-                case "1": registrar();
-                break;
-                case "2": login(); 
-                break;
-                case "0": corriendo = false; 
-                break;
-                default: System.out.println("Opción inválida.");
-            }
+    private void cargarAdmin() {
+        try (InputStream in = LoginController.class.getClassLoader().getResourceAsStream("application.properties")) {
+
+            Properties p = new Properties();
+            p.load(in);
+
+            adminUser = p.getProperty("adminUser");
+            adminPass = p.getProperty("adminPass");
+
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar application.properties: " + e.getLocalizedMessage());
         }
     }
 
-    private void showMenu() {
-        System.out.println("\n=== CIRCO - MENU ===");
-        System.out.println("1) Registrar credenciales (nombre/password/perfil)");
-        System.out.println("2) Login");
-        System.out.println("0) Salir");
-        System.out.print("Elige: ");
-    }
 
-    private void registrar() {
-        System.out.print("Nombre (usuario): ");
-        String nombre = sc.nextLine().trim();
-        if (nombre.isEmpty()) { 
-        	System.out.println("Nombre vacío."); 
-        	return; 
-        	}
-        if (credDAO.existeNombre(nombre)) { 
-        	System.out.println("Usuario ya existe.");
-        	return;
-        	}
+    public Perfiles login(String usuario, String password) {
 
-        System.out.print("Password: ");
-        String pass = sc.nextLine().trim();
-        if (pass.length() < 3) { 
-        	System.out.println("Password demasiado corta (mín 3)."); 
-        	return; }
-
-        System.out.print("Perfil (COORDINADOR / ARTISTA): ");
-        String p = sc.nextLine().trim().toUpperCase();
-        Perfiles perfil;
-        try {
-            perfil = Perfiles.valueOf(p);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Perfil no válido."); return;
+        
+        if (usuario.equals(adminUser) && password.equals(adminPass)) {
+            return Perfiles.ADMIN;
         }
 
-        Credenciales c = new Credenciales(null, nombre, pass, perfil);
-        boolean ok = credDAO.agregar(c);
-        System.out.println(ok ? "Registro correcto. ID=" + c.getId() : "Error al registrar.");
-    }
+     
+        Credenciales c = cDAO.obtenerPorNombre(usuario);
+        if (c == null) 
+        	return null;
 
-    private void login() {
-        System.out.print("Nombre: ");
-        String nombre = sc.nextLine().trim();
-        System.out.print("Password: ");
-        String pass = sc.nextLine().trim();
+        if (c.getPassword().equals(password)) {
+            return c.getPerfil();
+        }
 
-        boolean ok = credDAO.login(nombre, pass);
-        System.out.println(ok ? "Login correcto!" : "Credenciales inválidas.");
+        return null;
     }
 	
 	
