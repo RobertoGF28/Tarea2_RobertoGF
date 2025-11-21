@@ -11,30 +11,33 @@ import modelo.Perfiles;
 import util.ConexDB;
 
 public class CredencialesDAO {
+	public Long agregar(Credenciales c) {
+	    String sql = "INSERT INTO credenciales (nombre, password, perfil) VALUES (?, ?, ?)";
 
-	 public boolean agregar(Credenciales c) {
-	        String sql = "INSERT INTO credenciales (nombre, password, perfil) VALUES (?, ?, ?)";
-	        try (Connection conn = ConexDB.getConnection();
-	             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	    try (Connection conn = ConexDB.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-	            ps.setString(1, c.getNombre());
-	            ps.setString(2, c.getPassword());
-	            ps.setString(3, c.getPerfil().name());
+	        ps.setString(1, c.getNombre());
+	        ps.setString(2, c.getPassword());
+	        ps.setString(3, c.getPerfil().name());
 
-	            int rows = ps.executeUpdate();
-	            if (rows == 0) return false;
-	            
-	            try (ResultSet keys = ps.getGeneratedKeys()) {
-	                if (keys.next()) {
-	                    c.setId(keys.getLong(1));
-	                }
+	        int rows = ps.executeUpdate();
+	        if (rows == 0) return null;
+
+	        try (ResultSet keys = ps.getGeneratedKeys()) {
+	            if (keys.next()) {
+	                long id = keys.getLong(1);
+	                c.setId(id);
+	                return id;
 	            }
-	            return true;
-	        } catch (SQLException e) {
-	            System.err.println("Error al acceder al sql: " + e.getMessage());
-	            return false;
 	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("ERROR CredencialesDAO.agregar: " + e.getMessage());
 	    }
+
+	    return null;
+	}
 
 	 
 	    public Credenciales obtenerPorNombre(String nombre) {

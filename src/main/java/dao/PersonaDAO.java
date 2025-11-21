@@ -54,6 +54,25 @@ public class PersonaDAO {
         }
         return false;
     }
+    public boolean actualizar(Persona p) {
+        String sql = "UPDATE persona SET email=?, nombre=?, nacionalidad=? WHERE ID=?";
+
+        try (Connection conn = ConexDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, p.getEmail());
+            ps.setString(2, p.getNombre());
+            ps.setString(3, p.getNacionalidad());
+            ps.setLong(4, p.getId());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("ERROR en PersonaDAO.actualizar: " + e.getMessage());
+        }
+
+        return false;
+    }
 
 }
 

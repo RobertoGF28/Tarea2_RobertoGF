@@ -1,20 +1,21 @@
 package modelo;
 
 public class Artista extends Persona{
-	private Long idArt;
-	private String apodoString;
-	private Especialidades Especialidad[];
-	
-	
 
+    private Long idArt;
+    private String apodoString;
+    private Especialidades[] especialidad;
 
-	public Artista(long id, String email, String nombre, String nacionalidad, Long idArt, String apodoString,
-			Especialidades[] especialidad) {
-		super(id, email, nombre, nacionalidad, idArt);
-		this.idArt = idArt;
-		this.apodoString = apodoString;
-		Especialidad = especialidad;
-	}
+    public Artista(long idPersona, String email, String nombre, String nacionalidad,
+                   Long idCredenciales, Long idArt,
+                   String apodoString, Especialidades[] especialidad) {
+
+        super(idPersona, email, nombre, nacionalidad, idCredenciales);
+
+        this.idArt = idArt; 
+        this.apodoString = apodoString;
+        this.especialidad = especialidad;
+    }
 
 
 	public Long getIdArt() {
@@ -38,11 +39,11 @@ public class Artista extends Persona{
 
 
 	public Especialidades[] getEspecialidad() {
-		return Especialidad;
+		return especialidad;
 	}
 
 
 	public void setEspecialidad(Especialidades[] especialidad) {
-		Especialidad = especialidad;
+		especialidad = especialidad;
 	}
 }
