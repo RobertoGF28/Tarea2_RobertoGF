@@ -54,4 +54,11 @@ public class Numero {
 	public void setDuracion(double duracion) {
 		this.duracion = duracion;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Numero [idNum=" + idNum + ", orden=" + orden + ", nombre=" + nombre + ", duracion=" + duracion + "]";
+	}
+	
 }

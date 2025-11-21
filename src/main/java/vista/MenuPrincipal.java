@@ -22,7 +22,7 @@ public class MenuPrincipal {
     private LoginController login = new LoginController();
     private EspectaculoDAO eDAO = new EspectaculoDAO();
 
-    public void start() {
+    public void mostrar() {
         int opcion;
     	do {
     		   menuPrincipal();

@@ -9,6 +9,7 @@
 package controlador;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import dao.ArtistasDAO;
 import dao.CoordinacionDAO;
@@ -41,6 +42,11 @@ public class RegistroController {
 	            String apodo,
 	            Especialidades[] especialidades
 	    ) {
+	    	
+	    	if (!emailValido(email)) {
+	    	    System.err.println("El correo electrónico no tiene un formato válido.");
+	    	    return false;
+	    	}
 
 	      
 	        if (!XMLReader.existePais(idPais)) {
@@ -125,6 +131,22 @@ public class RegistroController {
 	        return false;
 	    }
 	    
+	    public boolean emailValido(String email) {
+	        if (email == null || email.isBlank()) return false;
+
+	        String patron = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+	        return email.matches(patron);
+	    }
+	    
+	    public LocalDate parsearFecha(String texto) {
+	        try {
+	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-uuuu");
+	            return LocalDate.parse(texto, formatter);
+	        } catch (Exception e) {
+	            return null; 
+	        }
+	   
+	    } 
 	    
 	    public boolean modificarPersona(long idPersona, String nuevoEmail, String nuevoNombre, String nuevaNacionalidad) {
 	        Persona persona = new Persona(idPersona, nuevoEmail, nuevoNombre, nuevaNacionalidad, 0);
