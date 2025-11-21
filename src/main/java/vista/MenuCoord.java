@@ -14,12 +14,23 @@ import java.util.List;
 import java.util.Scanner;
 
 import controlador.EspectaculoController;
+import controlador.NumeroController;
+import dao.ArtistasDAO;
 import dao.EspectaculoDAO;
+import dao.NumeroDAO;
+import modelo.Artista;
+import modelo.Coordinacion;
 import modelo.Espectaculo;
+import modelo.Numero;
 import modelo.Perfiles;
 
 public class MenuCoord {
 	 private Scanner sc = new Scanner(System.in);
+	 private Coordinacion coordinacion;
+
+	    public MenuCoord(Coordinacion coordinacion) {
+	        this.coordinacion = coordinacion;
+	    }
 
 	    public void mostrar() {
 	    	 int opcion;
@@ -41,7 +52,7 @@ public class MenuCoord {
 		                    break;
 
 		                case 2:
-		                    crearEspectaculoCoordinador(null);
+		                    crearEspectaculoCoordinador(this.coordinacion.getId());
 		                    break;
 
 		                case 3:
@@ -49,11 +60,11 @@ public class MenuCoord {
 		                    break;
 		                    
 		                case 4:
-		                   
+		                   crearNumero();
 		                    break;
 		                    
 		                case 5:
-		                    
+		                    modificarNumero();
 		                    break;
 
 		                case 0:
@@ -182,5 +193,129 @@ public class MenuCoord {
     	    if (ok) System.out.println("Espectáculo modificado correctamente.");
     	    else    System.err.println("Error al modificar el espectáculo.");
     
- }
+	    }
+	    private void verEspectaculoDetalle() {
+	    	sc.nextLine();
+
+	        EspectaculoDAO edao = new EspectaculoDAO();
+	        NumeroDAO ndao = new NumeroDAO();
+
+	        System.out.println("\n=== LISTA DE ESPECTÁCULOS ===");
+
+	        List<Espectaculo> espectaculos = edao.listarTodos();
+
+	        if (espectaculos.isEmpty()) {
+	            System.out.println("No hay espectáculos registrados.");
+	            return;
+	        }
+
+	        
+	        for (int i = 0; i < espectaculos.size(); i++) {
+	            Espectaculo e = espectaculos.get(i);
+	            System.out.println(e.getIdEsp() + " - " + e.getNombre());
+	        }
+
+	        System.out.print("\nSeleccione ID del espectáculo: ");
+	        Long idEsp = Long.parseLong(sc.nextLine());
+
+	        Espectaculo esp = edao.buscarPorId(idEsp);
+	        if (esp == null) {
+	            System.err.println("Espectáculo no encontrado.");
+	            return;
+	        }
+
+	        System.out.println("\n=== NÚMEROS DEL ESPECTÁCULO ===");
+	        System.out.println("Espectáculo: " + esp.getNombre() + "\n");
+
+	        List<Numero> numeros = ndao.listarPorEspectaculo(idEsp);
+
+	        if (numeros.isEmpty()) {
+	            System.out.println("Este espectáculo no tiene números registrados.");
+	            return;
+	        }
+
+	        for (int i = 0; i < numeros.size(); i++) {
+
+	            Numero n = numeros.get(i);
+
+	            System.out.println("-----------------------------");
+	            System.out.println("Orden: " + n.getOrden());
+	            System.out.println("Nombre: " + n.getNombre());
+	            System.out.println("Duración: " + n.getDuracion() + " min");
+	        }
+
+	        System.out.println("-----------------------------");
+	    }
+	    
+	    private void crearNumero() {
+	    	sc.nextLine();
+	        NumeroController nc = new NumeroController();
+	        ArtistasDAO artistaDAO = new ArtistasDAO();
+
+	        System.out.println("\n=== CREAR NÚMERO ===");
+
+	        System.out.print("ID del espectáculo: ");
+	        Long idEsp = Long.parseLong(sc.nextLine());
+
+	        System.out.print("Orden: ");
+	        int orden = Integer.parseInt(sc.nextLine());
+
+	        System.out.print("Nombre del número: ");
+	        String nombre = sc.nextLine();
+
+	        System.out.print("Duración (minutos): ");
+	        double dur = Double.parseDouble(sc.nextLine());
+
+	        System.out.println("Artistas disponibles:");
+	        List<Artista> artes = artistaDAO.listar();
+
+	        for (int i = 0; i < artes.size(); i++) {
+	            Artista a = artes.get(i);
+	            System.out.println(a.getIdArt() + " - " + a.getNombre());
+	        }
+
+	        System.out.print("ID del artista: ");
+	        Long idArt = Long.parseLong(sc.nextLine());
+
+	        boolean ok = nc.crearNumero(orden, nombre, dur, idEsp, idArt);
+
+	        if (ok) System.out.println("Número creado correctamente.");
+	        else System.err.println("No se pudo crear el número.");
+	    }
+	    
+	    private void modificarNumero() {
+	    	sc.nextLine();
+	    	NumeroController nc = new NumeroController();
+	        ArtistasDAO artistaDAO = new ArtistasDAO();
+
+	        System.out.println("\n=== MODIFICAR NÚMERO ===");
+
+	        System.out.print("ID del número a modificar: ");
+	        Long idNum = Long.parseLong(sc.nextLine());
+
+	        System.out.print("Nuevo orden: ");
+	        int orden = Integer.parseInt(sc.nextLine());
+
+	        System.out.print("Nuevo nombre: ");
+	        String nombre = sc.nextLine();
+
+	        System.out.print("Nueva duración (minutos): ");
+	        double dur = Double.parseDouble(sc.nextLine());
+
+	        System.out.println("Artistas disponibles:");
+	        List<Artista> artes = artistaDAO.listar();
+
+	        for (int i = 0; i < artes.size(); i++) {
+	            Artista a = artes.get(i);
+	            System.out.println(a.getIdArt() + " - " + a.getNombre());
+	        }
+
+	        System.out.print("Nuevo ID de artista: ");
+	        Long idArt = Long.parseLong(sc.nextLine());
+
+	        boolean ok = nc.modificarNumero(idNum, orden, nombre, dur, idArt);
+
+	        if (ok) System.out.println("Número modificado correctamente.");
+	        else System.err.println("No se pudo modificar el número.");
+	    }
 }

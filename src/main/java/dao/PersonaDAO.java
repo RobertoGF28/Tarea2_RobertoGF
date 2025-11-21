@@ -73,6 +73,32 @@ public class PersonaDAO {
 
         return false;
     }
+    public Persona buscarPorIdCredenciales(long idCred) {
+
+        String sql = "SELECT * FROM persona WHERE id_credenciales = ?";
+
+        try (Connection conn = ConexDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, idCred);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Persona(
+                    rs.getLong("ID"),
+                    rs.getString("email"),
+                    rs.getString("nombre"),
+                    rs.getString("nacionalidad"),
+                    rs.getLong("id_credenciales")
+                );
+            }
+
+        } catch (SQLException e) {
+            System.err.println("ERROR buscarPorIdCredenciales: " + e.getMessage());
+        }
+
+        return null;
+    }
 
 }
 

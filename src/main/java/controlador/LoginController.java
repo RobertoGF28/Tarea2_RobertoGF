@@ -34,21 +34,18 @@ public class LoginController {
         }
     }
 
-
-    public Perfiles login(String usuario, String password) {
+    public Credenciales login(String usuario, String password) {
 
         
         if (usuario.equals(adminUser) && password.equals(adminPass)) {
-            return Perfiles.ADMIN;
+            return new Credenciales(0L, adminUser, adminPass, Perfiles.ADMIN);
         }
 
-     
         Credenciales c = cDAO.obtenerPorNombre(usuario);
-        if (c == null) 
-        	return null;
+        if (c == null) return null;
 
         if (c.getPassword().equals(password)) {
-            return c.getPerfil();
+            return c;
         }
 
         return null;

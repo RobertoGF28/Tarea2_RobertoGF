@@ -11,9 +11,16 @@ package vista;
 import java.util.Scanner;
 
 import controlador.LoginController;
+import dao.ArtistasDAO;
+import dao.CoordinacionDAO;
 import dao.EspectaculoDAO;
+import dao.PersonaDAO;
+import modelo.Artista;
+import modelo.Coordinacion;
+import modelo.Credenciales;
 import modelo.Espectaculo;
 import modelo.Perfiles;
+import modelo.Persona;
 
 public class MenuPrincipal {
 	
@@ -65,27 +72,63 @@ public class MenuPrincipal {
     }
 
     private void iniciarSesion() {
-    	sc.nextLine();
+
+        sc.nextLine();
         System.out.print("Nombre de Usuario: ");
         String user = sc.nextLine();
 
         System.out.print("Contraseña: ");
         String password = sc.nextLine();
 
-        Perfiles perfil = login.login(user, password);
+        Credenciales cred = login.login(user, password);
 
-        if (perfil == null) {
+        if (cred == null) {
             System.out.println("Credenciales incorrectas.");
             return;
         }
 
-        switch (perfil) {
-        	case ADMIN: new MenuAdmin().mostrar();
-        	break;
-        	case COORDINACION: new MenuCoord().mostrar();
-        	break;
-        	case ARTISTA: new MenuArtista().mostrar();
-        	break;
+        
+        if (cred.getPerfil() == Perfiles.ADMIN) {
+            new MenuAdmin().mostrar();
+            return;
+        }
+
+     
+        PersonaDAO pdao = new PersonaDAO();
+        Persona persona = pdao.buscarPorIdCredenciales(cred.getId());
+
+        if (persona == null) {
+            System.err.println("ERROR: No hay persona asociada a estas credenciales.");
+            return;
+        }
+
+ 
+        switch (cred.getPerfil()) {
+
+            case ARTISTA:
+                ArtistasDAO adao = new ArtistasDAO();
+                Artista artista = adao.buscarPorIdPersona(persona.getId());
+
+                if (artista == null) {
+                    System.err.println("ERROR: No existe registro de artista asociado.");
+                    return;
+                }
+
+                new MenuArtista(artista).mostrar();
+                break;
+
+
+            case COORDINACION:
+                CoordinacionDAO cdao = new CoordinacionDAO();
+                Coordinacion coord = cdao.buscarPorIdPersona(persona.getId());
+
+                if (coord == null) {
+                    System.err.println("ERROR: No existe registro de coordinador asociado.");
+                    return;
+                }
+
+                new MenuCoord(coord).mostrar();
+                break;
         }
     }
 	
